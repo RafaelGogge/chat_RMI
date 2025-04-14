@@ -148,7 +148,8 @@ public class ChatClient extends UnicastRemoteObject implements ChatClientInterfa
                     if (server.registerUser(username, client)) {
                         registered = true;
 
-                        // Limpa o terminal (compatível com CMD do Windows, n funcionará em Linux pq é outro comando)
+                        // Limpa o terminal (compatível com CMD do Windows, n funcionará em Linux pq é
+                        // outro comando)
                         try {
                             new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
                         } catch (Exception ex) {
