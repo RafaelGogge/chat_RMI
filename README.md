@@ -1,5 +1,10 @@
-```markdown
-# 💬 Chat RMI — O Chat Mais Quinta Série da Internet 😄
+
+
+# 💬 Chat RMI — O Chat Mais Quinta Série da Internet
+
+<div style="text-align: center;">
+  <img src="https://i.pinimg.com/originals/89/50/5d/89505d16d932d8cca00011c78a54a69d.gif" width="150" />
+</div>
 
 Seja muito bem-vindo ao **Chat RMI**, o sistema de chat multiusuário mais zoeiro (e funcional!) que você respeita. Desenvolvido com **Java RMI (Remote Method Invocation)**, este projeto permite que diversos usuários se conectem a um servidor central e conversem em tempo real — com direito a mensagens privadas, mensagens anônimas e muita bagunça organizada.
 
@@ -114,6 +119,9 @@ Use, modifique, melhore e compartilhe — mas sem tirar o crédito da zoeira.
 Divirta-se, aprenda, ria e... **digite com responsabilidade!**  
 🧠💻🗨️  
 _O time do Chat RMI_
-```
 
----
+- Breno Nunes dos Santos -> Dev Back-End
+- Emanuel Gonçalves Ferreira -> Dev Prototipação e Design
+- Gabriel Lima Groner -> Dev Analista de Requisitos e Documentador do projeto
+- Rafael Vieira Gogge -> Dev Front End
+- Renan da Cruz Santos -> DBA e Analista de Requisitos
