@@ -46,8 +46,9 @@ Bem-vindo ao **Chat RMI** – o sistema de chat multiusuário mais zoeiro que vo
    ```bash
    javac *.java
 
-- **Iniciando o Servidor:** 
-1. java ChatServer
+##Iniciando o Servidor:
+   ```bash
+   java ChatServer
 
 - **Iniciando o Cliente** 
 1. java ChatClient
