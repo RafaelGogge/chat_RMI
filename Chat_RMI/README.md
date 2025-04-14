@@ -33,6 +33,12 @@ Seja muito bem-vindo ao **Chat RMI**, o sistema de chat multiusuário mais zoeir
 
 - **🧼 Limpeza de Terminal:**  
   Ao entrar no chat, o terminal é limpo automaticamente para deixar tudo bonito e pronto pra zoeira.
+  
+- **📃 Comando `/ajuda`**  
+  Mostra a tela de ajuda com todos os comandos disponíveis a qualquer momento.
+
+- **🧹 Comando `/limpar`**  
+  Limpa o terminal do usuário, deixando a tela organizada. Compatível com o CMD do Windows.
 
 ---
 
@@ -96,6 +102,8 @@ Comandos que você pode usar:
    /private <usuario> <mensagem> - Enviar mensagem privada (você será identificado)
    /anonimo <usuario> <mensagem> - Enviar mensagem anônima (ninguém saberá que foi você)
    /users                        - Ver quem está online
+  - /limpar                        Limpar o terminal
+  - /ajuda                         Mostrar esta lista de comandos
 Digite sua mensagem e pressione Enter:
 =========================================
 > 
@@ -119,6 +127,7 @@ Use, modifique, melhore e compartilhe — mas sem tirar o crédito da zoeira.
 
 Divirta-se, aprenda, ria e... **digite com responsabilidade!**  
 🧠💻🗨️  
+
 _O time do Chat RMI_
 
 - RA 6924106689 - Breno Nunes dos Santos
