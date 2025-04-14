@@ -2,6 +2,11 @@
 
 # 💬 Chat RMI — O Chat Mais Quinta Série da Internet
 
+<div style="text-align: center;">
+<img src="https://github.com/Anmol-Baranwal/Cool-GIFs-For-GitHub/assets/74038190/3b4607a1-1cc6-41f1-926f-892ae880e7a5" width="500">
+<br><br>
+</div>
+
 Seja muito bem-vindo ao **Chat RMI**, o sistema de chat multiusuário mais zoeiro (e funcional!) que você respeita. Desenvolvido com **Java RMI (Remote Method Invocation)**, este projeto permite que diversos usuários se conectem a um servidor central e conversem em tempo real — com direito a mensagens privadas, mensagens anônimas e muita bagunça organizada.
 
 ---
