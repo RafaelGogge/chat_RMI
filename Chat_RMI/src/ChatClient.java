@@ -10,7 +10,6 @@ public class ChatClient extends UnicastRemoteObject implements ChatClientInterfa
     private ChatServerInterface server;
 
     protected ChatClient(String username, ChatServerInterface server) throws RemoteException {
-        super();
         this.username = username;
         this.server = server;
     }
@@ -20,23 +19,38 @@ public class ChatClient extends UnicastRemoteObject implements ChatClientInterfa
         System.out.println("[" + sender + "]: " + message);
     }
 
+    // Método reutilizável para exibir comandos e mensagens de boas-vindas.
+    private void exibirTelaInicial() {
+        System.out.println();
+        System.out.println("==================================================================================");
+        System.out.println("> Você está prestes a participar de uma conversa que pode (ou não) fazer sentido!");
+        System.out.println("> Comandos que você pode usar:");
+        System.out.println();
+        System.out.println("  - /sair                          Sair do chat");
+        System.out.println(
+                "  - /private <usuario> <mensagem> Enviar mensagem privada (você será identificado, esteja ciente disso)");
+        System.out.println(
+                "  - /anonimo <usuario> <mensagem> Enviar mensagem anônima (ninguém saberá que foi você, use com moderação)");
+        System.out.println("  - /users                         Ver quem está online");
+        System.out.println("  - /limpar                        Limpar o terminal");
+        System.out.println("  - /ajuda                         Mostrar esta lista de comandos");
+        System.out.println();
+        System.out.println("> Digite sua mensagem e pressione Enter:");
+        System.out.println("==================================================================================");
+        System.out.println();
+    }
+
     public void start() {
         Scanner scanner = new Scanner(System.in);
 
-        // Instruções exibidas uma vez no início
-        System.out.println("==================================================================================");
-        System.out.println("Você está prestes a participar de uma conversa que pode (ou não) fazer sentido!");
-        System.out.println("Comandos que você pode usar:");
-        System.out.println("   /sair                         - Sair do chat");
-        System.out.println("   /private <usuario> <mensagem> - Enviar mensagem privada (você será identificado, esteja ciente disso)");
-        System.out.println("   /anonimo <usuario> <mensagem> - Enviar mensagem anônima (ninguém saberá que foi você, use com moderação)");
-        System.out.println("   /users                        - Ver quem está online");
-        System.out.println("Digite sua mensagem e pressione Enter:");
-        System.out.println("==================================================================================");
+        // Exibe a tela de instruções uma unica vez ao entrar para n poluir o chat.
+        exibirTelaInicial();
 
         try {
             while (true) {
                 System.out.print("> ");
+                System.out.print(" ");
+
                 String input = scanner.nextLine();
 
                 if (input.equalsIgnoreCase("/sair")) {
@@ -47,6 +61,7 @@ public class ChatClient extends UnicastRemoteObject implements ChatClientInterfa
                     }
                     System.out.println("Você saiu do chat. Sentiremos sua falta (ou não kkkk). Até logo!");
                     System.exit(0);
+
                 } else if (input.startsWith("/private ")) {
                     String[] parts = input.split(" ", 3);
                     if (parts.length >= 3) {
@@ -60,6 +75,7 @@ public class ChatClient extends UnicastRemoteObject implements ChatClientInterfa
                     } else {
                         System.out.println("Formato inválido. Tente assim: /private Fulano Olá, tudo bem?");
                     }
+
                 } else if (input.startsWith("/anonimo ")) {
                     String[] parts = input.split(" ", 3);
                     if (parts.length >= 3) {
@@ -73,15 +89,31 @@ public class ChatClient extends UnicastRemoteObject implements ChatClientInterfa
                     } else {
                         System.out.println("Formato inválido. Use: /anonimo Cicrano Você nunca saberá quem sou eu.");
                     }
+
                 } else if (input.equalsIgnoreCase("/users")) {
                     try {
-                        System.out.println("Usuários online agora:");
+                        System.out.println();
+                        System.out.println("========== USUÁRIOS ONLINE ==========");
                         for (String user : server.getOnlineUsers()) {
-                            System.out.println("- " + user);
+                            System.out.println(" - " + user);
                         }
+                        System.out.println("=====================================");
+                        System.out.println();
                     } catch (RemoteException re) {
                         System.out.println("Problema ao listar usuários online. Tente novamente.");
                     }
+
+                } else if (input.equalsIgnoreCase("/ajuda")) {
+                    exibirTelaInicial();
+
+                } else if (input.equalsIgnoreCase("/limpar")) {
+                    try {
+                        new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+                    } catch (Exception ex) {
+                        for (int i = 0; i < 50; i++)
+                            System.out.println();
+                    }
+
                 } else {
                     try {
                         server.broadcastMessage(username, input);
@@ -116,7 +148,7 @@ public class ChatClient extends UnicastRemoteObject implements ChatClientInterfa
                     if (server.registerUser(username, client)) {
                         registered = true;
 
-                        // Limpa o terminal (compatível com CMD do Windows)
+                        // Limpa o terminal (compatível com CMD do Windows, n funcionará em Linux pq é outro comando)
                         try {
                             new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
                         } catch (Exception ex) {
