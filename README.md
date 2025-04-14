@@ -1,7 +1,3 @@
-Claro! Aqui está uma versão melhorada, organizada e mais fluida do seu README, mantendo o tom divertido e explicativo, mas com uma estrutura mais profissional e visualmente amigável para o GitHub:
-
----
-
 ```markdown
 # 💬 Chat RMI — O Chat Mais Quinta Série da Internet 😄
 
