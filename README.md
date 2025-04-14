@@ -120,8 +120,8 @@ Divirta-se, aprenda, ria e... **digite com responsabilidade!**
 🧠💻🗨️  
 _O time do Chat RMI_
 
-- Breno Nunes dos Santos -> Dev Back-End
-- Emanuel Gonçalves Ferreira -> Dev Prototipação e Design
-- Gabriel Lima Groner -> Dev Analista de Requisitos e Documentador do projeto
-- Rafael Vieira Gogge -> Dev Front End
-- Renan da Cruz Santos -> DBA e Analista de Requisitos
+- RA 6924106689 - Breno Nunes dos Santos
+- RA 6924106574 - Emanuel Gonçalves Ferreira
+- RA 6924106412 - Gabriel Lima Groner
+- RA 6922203723 - Rafael Vieira Gogge
+- RA 6924106672 - Renan da Cruz Santos
