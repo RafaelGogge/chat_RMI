@@ -119,9 +119,6 @@ Use, modifique, melhore e compartilhe — mas sem tirar o crédito da zoeira.
 
 Divirta-se, aprenda, ria e... **digite com responsabilidade!**  
 🧠💻🗨️  
-<p align="center">
-  <img src="./src/img/veia_tikteko.gif" alt="Chat quinta série style" width="300"/>
-</p>
 
 _O time do Chat RMI_
 
