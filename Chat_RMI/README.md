@@ -2,11 +2,6 @@
 
 # 💬 Chat RMI — O Chat Mais Quinta Série da Internet
 
-<div style="text-align: center;">
-<img src="src/img/veia_tikteko.gif" width="500">
-<br><br>
-</div>
-
 Seja muito bem-vindo ao **Chat RMI**, o sistema de chat multiusuário mais zoeiro (e funcional!) que você respeita. Desenvolvido com **Java RMI (Remote Method Invocation)**, este projeto permite que diversos usuários se conectem a um servidor central e conversem em tempo real — com direito a mensagens privadas, mensagens anônimas e muita bagunça organizada.
 
 ---
@@ -126,3 +121,8 @@ _O time do Chat RMI_
 - RA 6924106412 - Gabriel Lima Groner
 - RA 6922203723 - Rafael Vieira Gogge
 - RA 6924106672 - Renan da Cruz Santos
+
+<div style="text-align: center;">
+<img src="src/img/veia_tikteko.gif" width="500">
+<br><br>
+</div>
