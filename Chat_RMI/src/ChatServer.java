@@ -1,132 +1,89 @@
 import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
-import java.util.Scanner;
-
-public class ChatClient extends UnicastRemoteObject implements ChatClientInterface {
-
-    private String username;
-    private ChatServerInterface server;
-
-    protected ChatClient(String username, ChatServerInterface server) throws RemoteException {
-        this.username = username;
-        this.server = server;
-    }
-
-    @Override
-    public void receiveMessage(String sender, String message) throws RemoteException {
-        System.out.println("[" + sender + "]: " + message);
-    }
-
-    // Metodo reutilizavel para exibir comandos e mensagens de boas-vindas.
-    private void exibirTelaInicial() {
-        System.out.println();
-        System.out.println("==================================================================================");
-        System.out.println("> Voce esta prestes a participar de uma conversa que pode (ou nao) fazer sentido!");
-        System.out.println("> Comandos que voce pode usar:");
-        System.out.println();
-        System.out.println("  - /sair                          Sair do chat");
-        System.out.println(
-                "  - /private <usuario> <mensagem> Enviar mensagem privada (voce sera identificado, esteja ciente disso)");
-        System.out.println(
-                "  - /anonimo <usuario> <mensagem> Enviar mensagem anonima (ninguem sabera que foi voce, use com moderacao)");
-        System.out.println("  - /users                         Ver quem esta online");
-        System.out.println("  - /limpar                        Limpar o terminal");
-        System.out.println("  - /ajuda                         Mostrar esta lista de comandos");
-        System.out.println();
-        System.out.println("> Digite sua mensagem e pressione Enter:");
-        System.out.println("==================================================================================");
-        System.out.println();
-    }
-
-    public void start() {
-        Scanner scanner = new Scanner(System.in);
-
-        // Exibe a tela de instrucoes uma unica vez ao entrar para nao poluir o chat.
-        exibirTelaInicial();
-
-        try {
-            while (true) {
-                System.out.print("> ");
-                System.out.print(" ");
-
-                String input = scanner.nextLine();
-
-                if (input.equalsIgnoreCase("/sair")) {
-                    try {
-                        server.disconnectUser(username);
-                    } catch (RemoteException re) {
-                        System.out.println("Algo deu errado ao tentar sair... mas ja estamos cuidando disso!");
-                    }
-                    System.out.println("Voce saiu do chat. Sentiremos sua falta (ou nao kkkk). Ate logo!");
-                    System.exit(0);
-
-                } else if (input.startsWith("/private ")) {
-                    String[] parts = input.split(" ", 3);
-                    if (parts.length >= 3) {
-                        String receiver = parts[1];
-                        String message = parts[2];
-                        try {
-                            server.sendPrivateMessage(username, receiver, message);
-                        } catch (RemoteException re) {
-                            System.out.println("Nao conseguimos enviar sua mensagem privada. Tente novamente!");
-                        }
-                    } else {
-                        System.out.println("Formato invalido. Tente assim: /private Fulano Ola, tudo bem?");
-                    }
-
-                } else if (input.startsWith("/anonimo ")) {
-                    String[] parts = input.split(" ", 3);
-                    if (parts.length >= 3) {
-                        String receiver = parts[1];
-                        String message = parts[2];
-                        try {
-                            server.sendAnonymousMessage(receiver, message);
-                        } catch (RemoteException re) {
-                            System.out.println("A mensagem anonima se perdeu no espaco... tente outra vez.");
-                        }
-                    } else {
-                        System.out.println("Formato invalido. Use: /anonimo Cicrano Voce nunca sabera quem sou eu.");
-                    }
-
-                } else if (input.equalsIgnoreCase("/users")) {
-                    try {
-                        System.out.println();
-                        System.out.println("========== USUARIOS ONLINE ==========");
-                        for (String user : server.getOnlineUsers()) {
-                            System.out.println(" - " + user);
-                        }
-                        System.out.println("=====================================");
-                        System.out.println();
-                    } catch (RemoteException re) {
-                        System.out.println("Problema ao listar usuarios online. Tente novamente.");
-                    }
-
-                } else if (input.equalsIgnoreCase("/ajuda")) {
-                    exibirTelaInicial();
-
-                } else if (input.equalsIgnoreCase("/limpar")) {
-                    try {
-                        new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
-                    } catch (Exception ex) {
-                        for (int i = 0; i < 50; i++)
-                            System.out.println();
-                    }
-
-                } else {
-                    try {
-                        server.broadcastMessage(username, input);
-                    } catch (RemoteException re) {
-                        System.out.println("Mensagem nao enviada. Talvez o servidor esteja de mau humor.");
-                    }
-                }
-            }
-        } catch (Exception e) {
-            System.out.println("Algo muito estranho aconteceu. Erro: " + e.getMessage());
-            e.printStackTrace();
-        } finally {
-            scanner.close();
-        }
-    }
-}
+ import java.rmi.server.UnicastRemoteObject;
+ import java.rmi.registry.LocateRegistry;
+ import java.rmi.Naming;
+ import java.util.ArrayList;
+ import java.util.HashMap;
+ import java.util.List;
+ import java.util.Map;
+ 
+ public class ChatServer extends UnicastRemoteObject implements ChatServerInterface {
+ 
+     private Map<String, ChatClientInterface> users;
+ 
+     protected ChatServer() throws RemoteException {
+         super();
+         users = new HashMap<>();
+     }
+ 
+     @Override
+     public synchronized boolean registerUser(String username, ChatClientInterface client) throws RemoteException {
+         if (users.containsKey(username)) {
+             return false;
+         }
+         users.put(username, client);
+         broadcastMessage("Servidor",
+                 "\"" + username + "\" acabou de entrar no chat. Dê as boas-vindas porque agora ficou mais divertido!");
+         return true;
+     }
+ 
+     @Override
+     public synchronized void broadcastMessage(String sender, String message) throws RemoteException {
+         for (ChatClientInterface client : users.values()) {
+             try {
+                 client.receiveMessage(sender, message);
+             } catch (RemoteException e) {
+                 e.printStackTrace();
+             }
+         }
+     }
+ 
+     @Override
+     public synchronized void sendPrivateMessage(String sender, String receiver, String message) throws RemoteException {
+         ChatClientInterface client = users.get(receiver);
+         if (client != null) {
+             client.receiveMessage(sender, message + " (mensagem privada somente para você!)");
+         } else {
+             ChatClientInterface senderClient = users.get(sender);
+             if (senderClient != null) {
+                 senderClient.receiveMessage("Servidor", "O usuário \"" + receiver + "\" não está online no momento.");
+             }
+         }
+     }
+ 
+     @Override
+     public synchronized void sendAnonymousMessage(String receiver, String message) throws RemoteException {
+         ChatClientInterface client = users.get(receiver);
+         if (client != null) {
+             client.receiveMessage("Anônimo", message + " (esta mensagem foi enviada de forma anônima)");
+         } else {
+             System.out.println("Tentativa de envio anônimo para \"" + receiver + "\", mas o usuário não está online.");
+         }
+     }
+ 
+     @Override
+     public synchronized List<String> getOnlineUsers() throws RemoteException {
+         return new ArrayList<>(users.keySet());
+     }
+ 
+     @Override
+     public synchronized void disconnectUser(String username) throws RemoteException {
+         if (users.containsKey(username)) {
+             users.remove(username);
+             broadcastMessage("Servidor", "\"" + username
+                     + "\" fugiu do chat! Mas tudo bem, a conversa ficou até melhor agora. Só não conta pra ele!");
+         }
+     }
+ 
+     public static void main(String[] args) {
+         try {
+             ChatServer server = new ChatServer();
+             LocateRegistry.createRegistry(1099);
+             Naming.rebind("ChatServer", server);
+             System.out.println("Servidor de chat RMI iniciado com sucesso. Aguardando conexões...");
+         } catch (Exception e) {
+             e.printStackTrace();
+         }
+     }
+ }
+ }
